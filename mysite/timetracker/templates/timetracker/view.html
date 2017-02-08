@@ -1,0 +1,12 @@
+{% extends 'timetracker/base.html' %}
+
+{% block content %}
+    Month = {{ month }}
+    Date = {{ day }}
+    Year = {{ year }}
+
+    <input type="text" />
+
+    <br/><br/>
+    <a href="{% url 'timetracker:edit_day' month day year %}">edit</a>
+{% endblock %}

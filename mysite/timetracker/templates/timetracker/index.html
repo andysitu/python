@@ -1,0 +1,10 @@
+{% extends "timetracker/base.html" %}
+{% load static %}
+
+{% block content %}
+
+    <script>
+        var testValue = "{{ tValue }}";
+    </script>
+    <script src="{% static 'timetracker/js/test.js' %}"></script>
+{% endblock %}

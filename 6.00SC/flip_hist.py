@@ -1,0 +1,16 @@
+import random
+
+def flip(numFlips):
+    heads = 0.0
+    for i in range(numFlips):
+        if random.random() < 0.5:
+            heads += 1
+    return heads/numFlips
+
+def flipSim(numFlipsPerTrial, numTrials):
+    fracHeads = []
+    for i in range(numTrials):
+        fracHeads.append(flip(numFlipsPerTrial))
+    mean = sum(fracHeads)/len(fraHeads)
+    sd = stdDev(fracHeads)
+    return (fracHeads, mean, sd)
