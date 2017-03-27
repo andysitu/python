@@ -9,7 +9,7 @@ def index(request):
     context = {"month": t.month, "day": t.day, "year": t.year}
     if user is not None:
         context.month = '5353'
-    return render(request, 'timetracker/vi)ew.html', context)
+    return render(request, 'timetracker/view.html', context)
 
 def edit_day(request, month, day, year):
     context = {"month": month, "day": day, "year": year}

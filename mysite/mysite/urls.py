@@ -23,4 +23,5 @@ urlpatterns = [
    url(r'^admin/', admin.site.urls),
    url(r'^login/$', auth_views.login, name='login'),
    url(r'logout/$', auth_views.logout, name='logout'),
+   url(r'excel_reader/', include('excel_reader.urls')),
 ]

@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'excel_reader.apps.ExcelReaderConfig',
     'timetracker.apps.TimetrackerConfig',
     'polls.apps.PollsConfig',
     'django.contrib.admin',
