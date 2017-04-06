@@ -12,24 +12,83 @@ def index(request):
     num_instances_available = BookInstance.objects.filter(status__exact='a').count()
     num_authors = Author.objects.count()
 
+    num_visits = request.session.get('num_visits', 0)
+    request.session['num_visits'] = num_visits + 1
+
     return render(
         request,
         'catalog/index.html',
-        context={'num_books':num_books,'num_instances':num_instances,'num_instances_available':num_instances_available,'num_authors':num_authors},
+        context={'num_books':num_books,'num_instances':num_instances,
+                 'num_instances_available':num_instances_available,
+                 'num_authors':num_authors, 'num_visits':num_visits,},
     )
 
 from django.views import generic
 
 class BookListView(generic.ListView):
     model = Book
+    paginate_by = 10
     context_objcet_name = "my_book_list"
     # queryset = Book.objects.filter(title__icontains='war')[:5]
 
-    def get_queryset(self):
-        return Book.objects.filter(title__icontains='war')[:5]
+    # def get_queryset(self):
+    #     return Book.objects.filter(title__icontains='war')[:5]
 
     def get_context_data(self, **kwargs):
         context = super(BookListView, self).get_context_data(**kwargs)
 
         context['some_data'] = 'This is just some dummy data'
         return context
+
+class BookDetailView(generic.DetailView):
+    model = Book
+
+class AuthorListView(generic.ListView):
+    model = Author
+
+class AuthorDetailView(generic.DetailView):
+    model = Author
+
+
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
+    """
+    Generic class-based view listing books on load to current user.
+    """
+    model = BookInstance
+    template_name = 'catalog/bookinstance_list_borrowed_user.html'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return BookInstance.objects.filter(borrower=self.request.user).filter(status__exact='o').order_by('due_back')
+
+from django.contrib.auth.decorators import permission_required
+
+from django.shortcuts import get_object_or_404
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
+import datetime
+
+from .forms import RenewBookForm
+
+@permission_required('catalog.can_mark_returned')
+def renew_book_librarian(request, pk):
+    """
+    View function for renewing a specific BookInstance by librarian
+    """
+    book_inst=get_object_or_404(BookInstance, pk = pk)
+
+    if request.method == 'POST':
+        form = RenewBookForm(request.POST)
+
+        if form.is_valid():
+            book_inst.due_back = form.cleaned_data['renewal_data']
+            book_inst.save()
+
+            return HttpResponseRedirect(reverse('all-borrowed'))
+    else:
+        proposed_renewal_date = datetime.date.today() + datetime.timedelta(week=3)
+        form = RenewBookForm(initial={'renewal_date': proposed_renewal_date,})
+
+    return render(request, 'catalog/book_renew_librarian.html', {'form': form, 'bookinst': book_inst})

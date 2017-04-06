@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-
 import openpyxl, pprint
 
 import os, sys
@@ -31,12 +30,15 @@ def convert_excel_to_py(excel_filename, py_filename='excel_data'):
         item_quantity =     sheet['K' + str(row)].value
         shipping_quantity = sheet['AC' + str(row)].value
         customer_id =       sheet['AH' + str(row)].value
+
+        # Encoded to perserve Chinese characters.
         item_name =         str((sheet['AN' + str(row)].value)).encode(sys.stdout.encoding, errors='replace')
-        print(item_name)
+        # print(item_name)
         last_out_date =     sheet['AK' + str(row)].value
         item_date =         sheet['J' + str(row)].value
         RCV_code =          sheet['N' + str(row)].value
         item_code =         sheet['AB' + str(row)].value
+
         excel_data[inven_id] = {
             'invetory id': inven_id,
             'location code': loc_code,
@@ -57,11 +59,13 @@ def convert_excel_to_py(excel_filename, py_filename='excel_data'):
             os.chdir('..')
             os.mkdir('py_data')
             os.chdir('py_data')
-    save_file = open(py_filename + '.py', 'w')
-    save_file.write('data = ' + pprint.pformat(excel_data))
-    save_file.close()
+
+
+    # save_file = open(py_filename + '.py', 'w')
+    # save_file.write('data = ' + pprint.pformat(excel_data))
+    # save_file.close()
     shelfFile = shelve.open(py_filename)
     shelfFile['data'] = excel_data
     shelfFile.close()
 
-convert_excel_to_py('ttt.xlsx', 'ttta')
+convert_excel_to_py('newest.xlsx', 'newest')

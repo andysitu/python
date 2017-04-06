@@ -1,5 +1,7 @@
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User
+from datetime import date
 
 class Genre(models.Model):
     """
@@ -31,7 +33,7 @@ class Book(models.Model):
     def __str__(self):
         return self.title
 
-    def get_absolute_url(selfself):
+    def get_absolute_url(self):
         """
         Returns the URL to access a particular book instance
         """
@@ -56,6 +58,14 @@ class BookInstance(models.Model):
     imprint = models.CharField(max_length=200)
     due_back = models.DateField(null=True, blank=True)
 
+    @property
+    def is_overdue(self):
+        if date.today() > self.due_back:
+            return True
+        return False
+
+    borrower = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+
     LOAN_STATUS = (
         ('d', 'Maintenance'),
         ('o', 'On loan'),
@@ -67,6 +77,7 @@ class BookInstance(models.Model):
 
     class Meta:
         ordering = ["due_back"]
+        permissions = (("can_make_returned", "Set book as returned"),)
 
     def __str__(self):
         """
@@ -81,7 +92,7 @@ class Author(models.Model):
     date_of_death = models.DateField('Died', null=True, blank=True)
 
     def get_absolute_url(self):
-        return reverse('author-')
+        return reverse('author-detail', args=[str(self.id)])
 
     def __str__(self):
         return '%s, %s' % (self.last_name, self.first_name)
