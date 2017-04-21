@@ -42,7 +42,7 @@ def count_products(data):
     num_items = 0
     for item_code in data:
         num_items += data[item_code]["item quantity"]
-    print(num_items)
+    print("TOTAL # OF ITEMS: ", num_items)
 
 # open_py_data(count_products)
 
@@ -70,7 +70,7 @@ def count_item_types(data):
         if item_type not in items_list:
             items_list[item_type] = True
             item_types += 1
-    print(item_types)
+    print("TOTAL # TYPES OF ITEMS: ", item_types)
 
 # open_py_data(count_item_types)
 
@@ -143,7 +143,7 @@ def find_empty_s_areas(data):
                     print(aisle, ", ",  row, ", ", level)
 
 
-open_py_data(find_empty_s_areas)
+# open_py_data(find_empty_s_areas)
 
 def find_num_customers(data):
     cust_list = {}
@@ -153,6 +153,57 @@ def find_num_customers(data):
         if cust_id not in cust_list:
             cust_list[cust_id] = True
             cust_num += 1
-    print(cust_num)
+    print("# CUSTOMERS", cust_num)
 
 # open_py_data(find_num_customers)
+
+import operator
+
+def find_top_customers_type(data):
+    item_list = {}
+    cust_list = {}
+    for item_code in data:
+        item_type = data[item_code]["item code"]
+        cust_id = data[item_code]['customer id']
+        if item_type not in item_list:
+            item_list[item_type] = cust_id
+    for item_id, cust_id in item_list.items():
+        if cust_id not in cust_list:
+            cust_list[cust_id] = 1
+        else:
+                cust_list[cust_id] += 1
+    sorted_list = sorted(cust_list.items(), key=operator.itemgetter(1))
+    sorted_list = sorted_list[::-1][0:10]
+    print("TOP 10 CUSTOMERS BY ITEM TYPE")
+    for x, y in sorted_list:
+        print(x, y)
+
+# open_py_data(find_top_customers_type)
+
+def find_top_customers_item(data):
+    item_list = {}
+    cust_list = {}
+    for item_code in data:
+        item_type = data[item_code]["item code"]
+        cust_id = data[item_code]['customer id']
+        num_items = data[item_code]["item quantity"]
+        if item_type not in item_list:
+            item_list[item_type] = (cust_id, num_items)
+        else:
+            tup = item_list[item_type]
+            item_list[item_type] = (cust_id, tup[1] + num_items)
+    for item_id, tup in item_list.items():
+        cust_id = tup[0]
+        item_count = tup[1]
+        if cust_id in cust_list:
+            cust_list[cust_id] += item_count
+        else:
+            cust_list[cust_id] = item_count
+    sorted_list = sorted(cust_list.items(), key=operator.itemgetter(1))
+    sorted_list = sorted_list[::-1][0:10]
+    print("TOP 10 CUSTOMERS BY ITEM COUNT")
+    for x, y in sorted_list:
+        print(x, y)
+
+# open_py_data(find_top_customers_item)
+
