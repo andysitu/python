@@ -49,6 +49,7 @@ def count_products(data):
 def count_products_by_location(data):
     items_list = {}
     loc_reg = re.compile("\.")
+    print("# Items by Location")
     for item_code in data:
         loc_list = loc_reg.split(data[item_code]["location code"])
         area = loc_list[1]
@@ -78,6 +79,8 @@ def count_item_types_by_area(data):
     items_list = {}
     item_types = {}
     loc_reg = re.compile("\.")
+
+    print("# Item Types Per Area")
 
     for item_code in data:
         loc_list = loc_reg.split(data[item_code]["location code"])
