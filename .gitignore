@@ -48,3 +48,8 @@ Temporary Items
 
 package_data/excel_files
 package_data/py_data
+
+.pyc
+*.pyc
+*.pyc
+locallibrary/.idea/workspace.xml
