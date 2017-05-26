@@ -53,3 +53,5 @@ package_data/py_data
 *.pyc
 *.pyc
 locallibrary/.idea/workspace.xml
+read_prod_summary/excel*
+read_prod_summary/.idea
