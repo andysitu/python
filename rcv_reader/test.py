@@ -105,6 +105,7 @@ def get_pdf_index_dic():
 
 def process_pdfs():
     index_dic = get_pdf_index_dic()
+    print("INDEX", index_dic)
 
     for pdf_name, rcv_name_list in index_dic.items():
 
@@ -160,3 +161,5 @@ def process_pdfs():
         make_pdf_file(prev_pdfwriter, prev_rcv_filename)
 
         ffile.dir_back(2)
+
+process_pdfs()
