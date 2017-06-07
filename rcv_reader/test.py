@@ -48,18 +48,52 @@ def get_pdf_index_dic():
 
     max_columns = sheet.max_column
 
+    cur_year = ''
+    cur_month = ''
 
-    for col in range(1, max_columns + 1, 2):
+    repeat_page_symbol = '-'
+
+
+    for col in range(1, max_columns + 1, 4):
         pdf_name = str(sheet.cell(row=1, column=col).value)
         index_dic[pdf_name] = []
 
         num_pages = sheet.cell(row=2, column=col).value
 
         pages_col_num = col + 1
+        year_col = col + 1
+        month_col = col + 2
+        day_rcv_col = col + 3
+
+        year = ''
+        month = ''
+        day_rcv = ''
 
         for page in range(1, num_pages + 1):
-            rcv_name = str(sheet.cell(row = page, column=pages_col_num).value)
+            year_cell = sheet.cell(row = page, column=year_col).value
 
+            if year_cell != None:
+                if year_cell < 10:
+                    year = "0" + str(year_cell)
+                else:
+                    year = str(year_cell)
+
+            month_cell = sheet.cell(row = page, column=month_col).value
+
+            if month_cell != None:
+                if month_cell < 10:
+                    month = "0" + str(month_cell)
+                else:
+                    month = str(month_cell)
+
+            day_rcv_cell = sheet.cell(row = page, column=day_rcv_col).value
+
+            day_rcv = str(day_rcv_cell)
+
+            if day_rcv == repeat_page_symbol:
+                rcv_name = day_rcv
+            else:
+                rcv_name = year + month + day_rcv
             index_dic[pdf_name].append(rcv_name)
 
     ffile.dir_back()
