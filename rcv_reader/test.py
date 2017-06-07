@@ -59,6 +59,9 @@ def get_pdf_index_dic():
         index_dic[pdf_name] = []
 
         num_pages = sheet.cell(row=2, column=col).value
+        if num_pages == None:
+            msg = "No num of pages " + pdf_name + " in column " + str(col)
+            raise Exception(msg)
 
         pages_col_num = col + 1
         year_col = col + 1
