@@ -3,6 +3,8 @@ import os, shelve, re
 def open_py_data(func):
     loc_data = {}
 
+    print(os.getcwd())
+
     try:
     # Tries to open py_data folder, which is where the converted data should be stored.
         os.chdir('py_data')
@@ -58,7 +60,7 @@ def count_products_by_location(data):
         else:
             items_list[area] = data[item_code]["item quantity"]
     for i in items_list:
-        print(i, items_list[i])
+        print(i, ":", items_list[i])
     return items_list
 
 # open_py_data(count_products_by_location)
@@ -92,61 +94,9 @@ def count_item_types_by_area(data):
         if item_type not in items_list[area]:
             items_list[area][item_type] = True
     for areas in items_list:
-        print(areas, len(items_list[areas].keys()))
+        print(areas, ":", len(items_list[areas].keys()))
 
 # open_py_data(count_item_types_by_area)
-
-def find_empty_s_areas(data):
-    s_area = {}
-
-    # Create areas and mark them all with False
-    for aisle in range(1, 57):
-        s_area[aisle] = {}
-        if aisle <= 10:
-            for row in range(1, 34):
-                s_area[aisle][row] = {}
-                for level in range(1, 7):
-                    s_area[aisle][row][level] = False
-        else:
-            for row in range(1, 43):
-                s_area[aisle][row] = {}
-                if row >= 27 and row <= 42:
-                    for level in range(1, 6):
-                        s_area[aisle][row][level] = False
-                else:
-                    for level in range(1, 7):
-                        s_area[aisle][row][level] = False
-
-    loc_reg = re.compile("USLA\.(?P<area>S|H)\.(S|H)(?P<aisle>\d+)\.(?P<row>\d+)\.(?P<level>\d+)")
-    loc_reg2 = re.compile("USLA\.(\w+)\.([\w\d]+)\.(\d+)\.(\d+)")
-    # for item_code in data:
-    #     loc_list = loc_reg.split(data[item_code]["location code"])
-    #     area = loc_list[1]
-    #     if area in items_list:
-    #         items_list[area] += data[item_code]["item quantity"]
-    #     else:
-    #         items_list[area] = data[item_code]["item quantity"]
-    # for i in items_list:
-    #     print(i, items_list[i])
-
-    for item_code in data:
-        loc = data[item_code]["location code"]
-        results = re.match(loc_reg, loc)
-        if results:
-            area = results.group('area')
-            aisle = int(results.group('aisle'))
-            row = int(results.group('row'))
-            level = int(results.group('level'))
-            s_area[aisle][row][level] = True
-
-    for aisle, a in s_area.items():
-        for row, r in a.items():
-            for level, l, in r.items():
-                if l == False:
-                    print(aisle, ", ",  row, ", ", level)
-
-
-# open_py_data(find_empty_s_areas)
 
 def find_num_customers(data):
     cust_list = {}
@@ -179,7 +129,7 @@ def find_top_customers_type(data):
     sorted_list = sorted_list[::-1][0:10]
     print("TOP 10 CUSTOMERS BY ITEM TYPE")
     for x, y in sorted_list:
-        print(x, y)
+        print(x, ":", y)
 
 # open_py_data(find_top_customers_type)
 
@@ -206,7 +156,7 @@ def find_top_customers_item(data):
     sorted_list = sorted_list[::-1][0:10]
     print("TOP 10 CUSTOMERS BY ITEM COUNT")
     for x, y in sorted_list:
-        print(x, y)
+        print(x, ":", y)
 
 # open_py_data(find_top_customers_item)
 
