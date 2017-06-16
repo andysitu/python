@@ -55,3 +55,12 @@ package_data/py_data
 locallibrary/.idea/workspace.xml
 read_prod_summary/excel*
 read_prod_summary/.idea
+
+ups_api/access_data
+
+rcv_ocr/jpg_raw
+rcv_ocr/Include
+rcv_ocr/Lib
+rcv_ocr/Scripts
+rcv_ocr/tcl
+rcv_ocr/*.json
