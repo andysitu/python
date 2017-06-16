@@ -8,7 +8,7 @@ import PyPDF2
 # print(pageObj.extractText())
 
 import ffile
-import os
+import os, os.path
 import openpyxl
 
 def read_pdf(filename):
@@ -131,7 +131,7 @@ def process_pdfs():
         ffile.dir_back()
 
 
-        ffile.move_dir('proc_pdf/' + pdf_name)
+        ffile.move_dir('proc_pdf/')
 
         pdf_pages = pdfReader.numPages
 
@@ -160,6 +160,6 @@ def process_pdfs():
         
         make_pdf_file(prev_pdfwriter, prev_rcv_filename)
 
-        ffile.dir_back(2)
+        ffile.dir_back()
 
 process_pdfs()
