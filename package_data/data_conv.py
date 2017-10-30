@@ -26,7 +26,7 @@ def convert_excel_to_py(excel_filename, py_filename='excel_data'):
     for row in range(2, sheet.max_row + 1):
         inven_id =          sheet['A' + str(row)].value
         loc_code =          sheet['C' + str(row)].value
-        avail_quantity =    sheet['AQ' + str(row)].value
+        avail_quantity =    sheet['AR' + str(row)].value
         item_quantity =     sheet['K' + str(row)].value
         shipping_quantity = sheet['AC' + str(row)].value
         customer_id =       sheet['AH' + str(row)].value
@@ -53,12 +53,12 @@ def convert_excel_to_py(excel_filename, py_filename='excel_data'):
             'item code': item_code
         }
 
-        try:
-            os.chdir('../py_data')
-        except (FileNotFoundError):
-            os.chdir('..')
-            os.mkdir('py_data')
-            os.chdir('py_data')
+    try:
+        os.chdir('../py_data')
+    except (FileNotFoundError):
+        os.chdir('..')
+        os.mkdir('py_data')
+        os.chdir('py_data')
 
 
     # save_file = open(py_filename + '.py', 'w')

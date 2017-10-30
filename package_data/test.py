@@ -1,4 +1,5 @@
 import os, shelve, re
+import operator
 
 def open_py_data(func):
     loc_data = {}
@@ -43,10 +44,34 @@ def open_py_data(func):
 def count_products(data):
     num_items = 0
     for item_code in data:
-        num_items += data[item_code]["item quantity"]
+        loc_code = data[item_code]["location code"]
+        loc_reg = re.compile("USLA\.(PA|PH|VC|VB|F|VA|VD|S|H)")
+        if loc_reg.match(loc_code):
+            num_items += data[item_code]["item quantity"]
     print("TOTAL # OF ITEMS: ", num_items)
 
 # open_py_data(count_products)
+
+
+def count_item_most_10(data):
+    items = {}
+    for item_code in data:
+        sku_code = data[item_code]["item code"]
+        loc_code = data[item_code]["location code"]
+        loc_reg = re.compile("USLA\.(PA|PH|VC|VB|F|VA|VD|S|H)")
+        if loc_reg.match(loc_code):
+            if sku_code in items:
+                items[sku_code] += data[item_code]["item quantity"]
+            else:
+                items[sku_code] = data[item_code]["item quantity"]
+
+    sorted_list = sorted(items.items(), key=operator.itemgetter(1))
+    sorted_list = sorted_list[::-1][0:10]
+    print("TOP 10 Items")
+    for x, y in sorted_list:
+        print(x, ":", y)
+
+open_py_data(count_item_most_10)
 
 def count_products_by_location(data):
     items_list = {}
